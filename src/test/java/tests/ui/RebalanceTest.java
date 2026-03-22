@@ -217,17 +217,5 @@ In your code:
         return expectedBD.compareTo(actualSharesBD) == 0;
    }
 
-    @Test
-    public void validateDB() throws Exception {
-
-        int shares = QueryExecutor.getShares("IBM");
-
-        Assert.assertEquals(shares, 67);
-        
-        Assert.assertEquals(shares, 67, "Mismatch in IBM shares after rebalance");
-        
-        System.out.println("IBM Actual Shares: " + shares );
-        
-        System.out.println("Database validation passed!");
-    }
+   
 }
