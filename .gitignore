@@ -1,0 +1,63 @@
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA
+*.iml
+.idea/
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment
+.env
+
+# Others
+*.swp
+*~
+
+# Test output
+/test-output/
+
+# Database files
+*.h2.db
+*.mv.db
+*.sqlite
+
+# VSCode
+.vscode/
+
+# Ignore SQL dumps
+*.sql
+
+# Ignore coverage reports
+coverage/
+*.exec
+
+# Ignore build tools
+/build/
+
+# Ignore dependency directories
+/node_modules/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore macOS resource forks
+._*
