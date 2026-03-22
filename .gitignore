@@ -42,8 +42,7 @@ Thumbs.db
 # VSCode
 .vscode/
 
-# Ignore SQL dumps
-*.sql
+
 
 # Ignore coverage reports
 coverage/
