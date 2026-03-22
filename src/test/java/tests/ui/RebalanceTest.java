@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RebalanceUITest extends BaseTest {
+public class RebalanceTest extends BaseTest {
 
     @Test
     public void validateRebalanceAPI() {
