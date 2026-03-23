@@ -36,10 +36,9 @@ public class BalanceResultsDAO {
                     batchId = rs.getInt("next_batch_id");
                 }
             }
+            System.out.println("Created Batch ID with : " + batchId + " for " + results.size() + " results");
             
-            System.out.println("✓ Created Batch ID: " + batchId + " for " + results.size() + " results");
-            
-            // Step 2: Insert ALL results with the SAME batch_id
+        // Step 2: Insert ALL results with the SAME batch_id into the DB
             String sql = "INSERT INTO balance_batch_results (batch_id, sec_name, action, share_quantity) VALUES (?, ?, ?, ?)";
             
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -54,17 +53,16 @@ public class BalanceResultsDAO {
                     ps.addBatch();
                 }
                 
-                // Execute batch insert - ALL records inserted at once
+                // Execute batch insert - ALL records inserted at once into DB
                 int[] batchResults = ps.executeBatch();
                 
-                System.out.println("✓ Inserted " + batchResults.length + " records");
-    
-                
+                System.out.println("Rebalance Result Inserted into Balance_batch_results table " + batchResults.length + " records");
+                    
                 return batchId;  // ← Return ONE batch_id for all 5 results
             }
             
         } catch (SQLException e) {
-            System.out.println("✗ Error saving batch results: " + e.getMessage());
+            System.out.println("Error saving batch results into DB: " + e.getMessage());
             throw new Exception("Failed to save balance results to database", e);
         } finally {
             if (conn != null) {
@@ -79,7 +77,6 @@ public class BalanceResultsDAO {
     
     /**
      * Retrieve all rebalance results for a specific batch_id
-     * 
      * @param batchId The batch ID to retrieve
      * @return List<RebalanceResult> containing all results for this batch
      * @throws Exception if database error occurs
@@ -98,7 +95,7 @@ public class BalanceResultsDAO {
             
             try (ResultSet rs = ps.executeQuery()) {
                 
-                // Fetch all results for this batch_id
+                // Fetch all results for this batch_id from DB
                 while (rs.next()) {
                     String secName = rs.getString("sec_name");
                     String action = rs.getString("action");
@@ -110,7 +107,7 @@ public class BalanceResultsDAO {
                 }
             }
             
-            System.out.println("✓ Retrieved " + results.size() + " results for Batch ID: " + batchId);
+            System.out.println("RebalanceResult Retrieved from DB" + results.size() + " results for Batch ID: " + batchId);
             
             return results;
             
@@ -119,6 +116,10 @@ public class BalanceResultsDAO {
             throw new Exception("Failed to retrieve batch results from database", e);
         }
     }
+    
+    
+    
+    
     
     // ...existing code...
     public static boolean saveSingleResult(RebalanceResult result) throws Exception {
@@ -141,8 +142,12 @@ public class BalanceResultsDAO {
             return false;
             
         } catch (SQLException e) {
-            System.out.println("✗ Error saving result: " + e.getMessage());
+            System.out.println("Error saving result: " + e.getMessage());
             throw new Exception("Failed to save balance result to database", e);
         }
     }
+     
+    
+    
+    
 }

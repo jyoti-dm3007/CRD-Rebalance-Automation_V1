@@ -41,7 +41,6 @@ public  class RebalanceService {
     
     
     
-    
  public static int balancePorfolioBatch(List<Security> securities,double totalAssetValue) {
     	
     	List<RebalanceResult> results = balancePorfolio(securities, totalAssetValue);
@@ -52,12 +51,12 @@ public  class RebalanceService {
 		// Use DAO layer to save the results to DB and get batch ID
 		int batchId = BalanceResultsDAO.saveBatchResults(results);
 		
-		System.out.println("✓ Successfully saved with Batch ID: " + batchId);
+		System.out.println("Successfully saved into balance_batch_results DB-table with Batch ID: " + batchId);
 		
 		return batchId;  // Return batch ID
 		
 	} catch (Exception e) {
-		System.out.println("✗ Error saving results: " + e.getMessage());
+		System.out.println("Error saving results: " + e.getMessage());
 		e.printStackTrace();
 		return -1;  // Return -1 on error
 	}
@@ -72,7 +71,7 @@ public  class RebalanceService {
 			// Use DAO layer to fetch results by batch ID
 			List<RebalanceResult> results = BalanceResultsDAO.getResultsByBatchId(batchId);
 			
-			System.out.println("✓ Successfully retrieved " + results.size() + " results for Batch ID: " + batchId);
+			System.out.println("Successfully retrieved data from balance_batch_results DB-table " + results.size() + " results for Batch ID: " + batchId);
 			
 			return results;
 			

@@ -12,7 +12,7 @@ public class PlaywrightFactory {  //Browser Engine
         playwright = Playwright.create();
 
         browser = playwright.chromium().launch(
-                new BrowserType.LaunchOptions().setHeadless(false) //Headless or Headed mode control
+                new BrowserType.LaunchOptions().setHeadless(true) //Headless or Headed mode control
         );
                
         return browser.newPage();

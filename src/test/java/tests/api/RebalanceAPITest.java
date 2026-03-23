@@ -22,7 +22,7 @@ public class RebalanceAPITest {
     @BeforeClass
     public void setup() {
         RestAssured.baseURI = BASE_URL;
-        System.out.println("✓ RestAssured configured for: " + BASE_URL);
+        System.out.println("RestAssured configured for: " + BASE_URL);
     }
 
     /**
@@ -45,7 +45,7 @@ public class RebalanceAPITest {
             .body("healthy", equalTo(true))
             .body("message", containsString("up and running"));
 
-        System.out.println("✓ PASSED");
+        System.out.println("Test-Health Check PASSED");
     }
 
     /**
@@ -54,7 +54,7 @@ public class RebalanceAPITest {
      */
     @Test(priority = 2)
     public void testCalculateOnly() {
-        System.out.println("\n📊 TEST 2: Calculate Rebalance (No DB Save)");
+        System.out.println("\n TEST 2: Calculate Rebalance (No DB Save)");
         System.out.println("POST " + API_PATH + "/calculate");
 
         String requestBody = "{ \"totalAssetValue\": 100000 }";
@@ -82,14 +82,14 @@ public class RebalanceAPITest {
         List<Map<String, Object>> results = response.jsonPath().getList("results");
         Assert.assertEquals(results.size(), 5, "Expected 5 results");
 
-        System.out.println("✓ Results:");
+        System.out.println("Check the Results:");
         for (Map<String, Object> result : results) {
             System.out.println("  " + result.get("shareName") + " - " + 
                              result.get("action") + " - " + 
                              result.get("shares") + " shares");
         }
 
-        System.out.println("✓ PASSED");
+        System.out.println("Test-Calculate Rebalance (No DB Save PASSED");
     }
 
     /**
@@ -98,7 +98,7 @@ public class RebalanceAPITest {
      */
     @Test(priority = 3)
     public void testCalculateAndSaveBatch() {
-        System.out.println("\n📊 TEST 3: Calculate and Save Batch");
+        System.out.println("\n TEST 3: Calculate and Save Batch");
         System.out.println("POST " + API_PATH + "/calculate-batch");
 
         String requestBody = "{ \"totalAssetValue\": 100000 }";
@@ -116,10 +116,10 @@ public class RebalanceAPITest {
 
         int statusCode = response.getStatusCode();
         if (statusCode == 500) {
-            System.err.println("✗ Server error occurred: " + response.getBody().asString());
+            System.err.println("Server error occurred: " + response.getBody().asString());
             Assert.fail("Server error: 500");
         } else if (statusCode != 200) {
-            System.err.println("✗ Unexpected status code: " + statusCode);
+            System.err.println("Unexpected status code: " + statusCode);
             Assert.fail("Unexpected status code: " + statusCode);
         }
 
@@ -131,8 +131,8 @@ public class RebalanceAPITest {
         batchId = response.jsonPath().getInt("batchId");
         Assert.assertTrue(batchId > 0, "Batch ID is not valid");
 
-        System.out.println("✓ Batch ID created: " + batchId);
-        System.out.println("✓ PASSED");
+        System.out.println(" Batch ID created: " + batchId);
+        System.out.println("Test-Calculate and Save Batch into DB PASSED");
     }
 
     /**
@@ -141,7 +141,7 @@ public class RebalanceAPITest {
      */
     @Test(priority = 4, dependsOnMethods = "testCalculateAndSaveBatch")
     public void testGetResultsByBatchId() {
-        System.out.println("\n📊 TEST 4: Get Results by Batch ID");
+        System.out.println("\n TEST 4: Get Results by Batch ID");
         System.out.println("GET " + API_PATH + "/batch/" + batchId);
 
         Response response = given()
@@ -163,7 +163,7 @@ public class RebalanceAPITest {
         List<Map<String, Object>> results = response.jsonPath().getList("results");
         Assert.assertEquals(results.size(), 5, "Expected 5 results in batch");
 
-        System.out.println("✓ Retrieved " + results.size() + " results from batch " + batchId);
+        System.out.println("Rebalance Retrieved from DB-table " + results.size() + " results from batch " + batchId);
         System.out.println("✓ Results:");
         for (Map<String, Object> result : results) {
             System.out.println("  " + result.get("shareName") + " - " + 
@@ -171,7 +171,7 @@ public class RebalanceAPITest {
                              result.get("shares") + " shares");
         }
 
-        System.out.println("✓ PASSED");
+        System.out.println("Test-Get Results by Batch ID from DB-table PASSED");
     }
 
     /**
@@ -180,7 +180,7 @@ public class RebalanceAPITest {
      */
     @Test(priority = 5, dependsOnMethods = "testCalculateAndSaveBatch")
     public void testIBMRebalanceAction() {
-        System.out.println("\n📊 TEST 5: Verify IBM Stock Rebalance");
+        System.out.println("\n TEST 5: Verify IBM Stock Rebalance");
         System.out.println("GET " + API_PATH + "/batch/" + batchId + " -> IBM");
 
         Response response = given()
@@ -206,8 +206,8 @@ public class RebalanceAPITest {
         Assert.assertEquals(ibm.get("action"), "BUY", "IBM action should be BUY");
         Assert.assertEquals(ibm.get("shares"), 67.0, "IBM shares should be 67");
 
-        System.out.println("✓ IBM: " + ibm.get("action") + " " + ibm.get("shares") + " shares");
-        System.out.println("✓ PASSED");
+        System.out.println(" IBM: " + ibm.get("action") + " " + ibm.get("shares") + " shares");
+        System.out.println("Test-Verify IBM Stock Rebalance Action PASSED");
     }
 
     /**
@@ -216,7 +216,7 @@ public class RebalanceAPITest {
      */
     @Test(priority = 6, dependsOnMethods = "testCalculateAndSaveBatch")
     public void testAllSecuritiesPresent() {
-        System.out.println("\n📊 TEST 6: Validate All Securities Present");
+        System.out.println("\n TEST 6: Validate All Securities Present");
         System.out.println("GET " + API_PATH + "/batch/" + batchId);
 
         Response response = given()
@@ -241,7 +241,7 @@ public class RebalanceAPITest {
             System.out.println("✓ " + security + " found");
         }
 
-        System.out.println("✓ PASSED");
+        System.out.println("Test-Validate All Securities Present PASSED");
     }
 
     /**
@@ -250,7 +250,7 @@ public class RebalanceAPITest {
      */
     @Test(priority = 7)
     public void testInvalidBatchId() {
-        System.out.println("\n📊 TEST 7: Invalid Batch ID");
+        System.out.println("\n TEST 7: Invalid Batch ID");
         System.out.println("GET " + API_PATH + "/batch/999");
 
         given()
@@ -263,7 +263,7 @@ public class RebalanceAPITest {
             .statusCode(200)  // API returns 200 but with success=false
             .body("success", equalTo(false));
 
-        System.out.println("✓ PASSED");
+        System.out.println("Test-Invalid Batch ID (Should return empty or error) PASSED");
     }
 
     /**
@@ -272,7 +272,7 @@ public class RebalanceAPITest {
      */
     @Test(priority = 8)
     public void testMultipleBatches() {
-        System.out.println("\n📊 TEST 8: Create Multiple Batches");
+        System.out.println("\n TEST 8: Create Multiple Batches");
 
         // First batch
         System.out.println("Creating Batch 1...");
@@ -289,7 +289,7 @@ public class RebalanceAPITest {
             .response();
 
         int batch1 = response1.jsonPath().getInt("batchId");
-        System.out.println("✓ Batch 1 ID: " + batch1);
+        System.out.println(" Batch 1 ID: " + batch1);
 
         // Second batch
         System.out.println("Creating Batch 2...");
@@ -306,12 +306,12 @@ public class RebalanceAPITest {
             .response();
 
         int batch2 = response2.jsonPath().getInt("batchId");
-        System.out.println("✓ Batch 2 ID: " + batch2);
+        System.out.println(" Batch 2 ID: " + batch2);
 
         // Verify batch IDs are different
         Assert.assertNotEquals(batch1, batch2, "Batch IDs should be different");
-        System.out.println("✓ Batch IDs are sequential");
-        System.out.println("✓ PASSED");
+        System.out.println("Created Batch IDs are sequential");
+        System.out.println("Test-Multiple Batches creation into DB PASSED");
     }
 
    

@@ -1,4 +1,4 @@
-package tests.ui;
+package tests.service;
 
 import base.BaseTest;
 import models.Security;
@@ -55,6 +55,7 @@ public class RebalanceTest extends BaseTest {
 			HashMap<String, RebalanceResult> expectedData) {
 		
 		List<String> errors = new ArrayList<String>();
+		HashMap<String,RebalanceResult> actualData =  new HashMap();
 			
         
         for (int i = 0 ; i < testData.size(); i++) {
@@ -66,41 +67,49 @@ public class RebalanceTest extends BaseTest {
 							filter(r -> r.getShareName().equalsIgnoreCase(testSec.name)).
 							count();
 			 
-			if(matchCount == 0) {
-				//Assert.fail(testSec.name + " is missing in actual results");
+			if(matchCount == 0) {  //TC1.1
 				errors.add(testSec.name + " is missing in actual results");
-				continue; // Skip further validation for this security
-			} else if (matchCount > 1) {
-				//Assert.fail("Multiple entries found for " + testSec.name + " in actual results");
+				continue; 
+			} else if (matchCount > 1) {//TC1.2
 				errors.add("Multiple entries found for " + testSec.name + " in actual results");
-				continue; // Skip further validation for this security
+				continue; 
 			}
 			
 			RebalanceResult actualResult = actualResults.stream().
 											 filter(r -> r.getShareName().equalsIgnoreCase(testSec.name)).
 											 findFirst().orElse(null);
 			
+			actualData.put(testSec.name,actualResult) ;
+			
 	
 	       
-		      // Validate action (BUY/SELL/NONE)
+		      // Validate action (BUY/SELL/NONE)  TC2.1-2.2
 	        if (validateBalanceAction(expectedAction.getAction(), actualResult.getAction())) {
 	        	
 	        } else {
-	        	//Assert.fail(testSec.name + " action mismatch: expected " + expectedAction.getAction() + " but got " + actualResult.getAction());
 	        	errors.add(testSec.name + " action mismatch: expected " + expectedAction.getAction() + " but got " + actualResult.getAction());
 	        }
 	        
-	    	// Validate shares
+	    	// Validate shares  //TC2.3
 	        if (validateShareCount(expectedAction.getShares(), actualResult.getShares())) {}
 	        else {
-	        	//Assert.fail(testSec.name + " shares mismatch: expected " + expectedAction.getShares() + " but got " + actualResult.getShares());
 	        	errors.add(testSec.name + " shares mismatch: expected " + expectedAction.getShares() + " but got " + actualResult.getShares());
 	        }
         }
         
+        //validate total Assets value
+        BigDecimal updateTotalAssetValue = TestDataProvider.calculateUpdatedPortfolioValue(testData, 
+        		actualData, 
+        		BigDecimal.valueOf(TestDataProvider.totalAssetPrice())); 
+        System.out.print("updateTotalAssetValue :"+updateTotalAssetValue);
+        if (updateTotalAssetValue.compareTo(
+                BigDecimal.valueOf(TestDataProvider.totalAssetPrice())) > 0) {
+        	errors.add("Asset Price Croosed to =>" + updateTotalAssetValue.doubleValue()) ;
+        }
+        
         // Check for any unexpected securities in actual results  -Data integrity check
-        for (RebalanceResult actual : actualResults) {
-			if (!expectedData.containsKey(actual.getShareName())) {
+        for (RebalanceResult actual : actualResults) { //TC3.1
+        	if (!expectedData.containsKey(actual.getShareName())) {
 				//Assert.fail("Unexpected security in actual results: " + actual.getShareName());
 				errors.add("Unexpected security in actual results: " + actual.getShareName());
 			}

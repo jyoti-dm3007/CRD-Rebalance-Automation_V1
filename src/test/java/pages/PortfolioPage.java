@@ -8,7 +8,7 @@ public class PortfolioPage extends BasePage {
     public PortfolioPage(Page page) {
         super(page);
     }
-
+/*
     // method to get shares with wait
     public long getShares(String securityName) {
         // Using CSS selector - the td has BOTH classes: highlight AND shareQty
@@ -32,4 +32,5 @@ public class PortfolioPage extends BasePage {
         System.out.println("Found action: " + text);
         return text;
     }
+    */
 }

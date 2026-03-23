@@ -20,10 +20,22 @@ CREATE TABLE public.balance_batch_results (
 
 -- DROP TABLE public.securities;
 
-CREATE TABLE public.securities (
-	security_id serial4 NOT NULL,
-	ticker varchar(10) NULL,
-	"name" varchar(100) NULL,
-	CONSTRAINT securities_pkey PRIMARY KEY (security_id),
-	CONSTRAINT securities_ticker_key UNIQUE (ticker)
+CREATE TABLE portfolio_securities (
+    id SERIAL PRIMARY KEY,
+    portfolio_id INT NOT NULL,
+    sec_name VARCHAR(10) NOT NULL,
+    target_percent DECIMAL(5,2) NOT NULL,
+    current_percent DECIMAL(5,2) NOT NULL,
+    unit_price DECIMAL(10,2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+INSERT INTO portfolio_securities 
+(portfolio_id, sec_name, target_percent, current_percent, unit_price)
+VALUES
+(1, 'IBM', 20, 10, 150),
+(1, 'MSFT', 20, 20, 90),
+(1, 'ORCL', 20, 30, 220),
+(1, 'AAPL', 20, 20, 450),
+(1, 'HD', 20, 20, 70);

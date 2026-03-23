@@ -34,6 +34,13 @@ public class Security implements Comparable<Security> {
 		return this.name.compareTo(o.name);
 		
 	}
+	
+	public String toString() {
+		return "Sec name :"  + name  + "| targetPerAsset:" + targetPerAsset  +
+				 " | currentPerAsset: " + currentPerAsset + " | unitPrice:" + unitPrice + "\n" ;
+		
+		
+	}
     
 }
 

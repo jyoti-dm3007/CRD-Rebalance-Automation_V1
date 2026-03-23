@@ -1,15 +1,22 @@
 
 <suite name="CRD Rebalance Automation Suite" >
 
-    <!-- GLOBAL PARAMETERS -->
+    <!-- GLOBAL PARAMETERS 
     <parameter name="baseUrl" value="file:///C:/Jyoti/JM-CVV/CRD/preview%20(1).html"/>
-    <parameter name="totalAsset" value="100000"/>
+    <parameter name="totalAsset" value="100000"/> -->
 
-    <!-- UI Tests -->
-    <test name="UI Rebalance Tests">
+    <!-- API Tests -->
+    <test name="API Rebalance Tests">
         <packages>
-            <package name="tests.ui"/>
+            <package name="tests.api"/>
         </packages>
     </test>   
+ <!-- Service DB Tests -->
+    <test name="Service DB Rebalance Tests">
+        <packages>
+            <package name="tests.service"/>
+        </packages>
+    </test>   
+
 
 </suite>
