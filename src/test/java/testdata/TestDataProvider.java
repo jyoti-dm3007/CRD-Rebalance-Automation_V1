@@ -19,13 +19,13 @@ public class TestDataProvider {
 
     public static List<Security> testData() {
 
-		/*
-		 * return Arrays.asList( new Security("IBM",20,10,150), new
-		 * Security("MSFT",20,20,90), new Security("ORCL",20,30,220), new
-		 * Security("AAPL",20,20,450), new Security("HD",20,20,70) );
-		 */
+		
+		  return Arrays.asList( new Security("IBM",20,10,150), new
+		  Security("MSFT",20,20,90), new Security("ORCL",20,30,220), new
+		  Security("AAPL",20,20,450), new Security("HD",20,20,70) );
+		 
         
-       return getSecuritiesFromDB(1) ;   // Retrieve get data from DB table portfolio_securities
+      // return getSecuritiesFromDB(1) ;   // Retrieve get data from DB table portfolio_securities
  
     }
     
