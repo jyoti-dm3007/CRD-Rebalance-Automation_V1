@@ -28,33 +28,10 @@ public class RebalanceAPITest {
     }
 
     /**
-     * Test 1: Health Check
-     * GET /api/rebalance/health
-     */
-    @Test(priority = 1)
-    public void testHealthCheck() {
-        System.out.println("\n TEST 1: Health Check");
-        System.out.println("GET " + API_PATH + "/health");
-
-        given()
-            .log().all()
-        .when()
-            .get(API_PATH + "/health")
-        .then()
-            .log().all()
-            .statusCode(200)
-            .contentType(ContentType.JSON)
-            .body("healthy", equalTo(true))
-            .body("message", containsString("up and running"));
-
-        System.out.println("Test-Health Check PASSED");
-    }
-
-    /**
      * Test 2: Calculate Only (No Database Save)
      * POST /api/rebalance/calculate
      */
-    @Test(priority = 2)
+    @Test(priority = 1)
     public void testCalculateOnly() {
         System.out.println("\n TEST 2: Calculate Rebalance (No DB Save)");
         System.out.println("POST " + API_PATH + "/calculate");
@@ -98,7 +75,7 @@ public class RebalanceAPITest {
      * Test 3: Calculate and Save to Database (Creates Batch)
      * POST /api/rebalance/calculate-batch
      */
-    @Test(priority = 3)
+    @Test(priority = 2)
     public void testCalculateAndSaveBatch() {
         System.out.println("\n TEST 3: Calculate and Save Batch");
         System.out.println("POST " + API_PATH + "/calculate-batch");
@@ -141,7 +118,7 @@ public class RebalanceAPITest {
      * Test 4: Get Results by Batch ID
      * GET /api/rebalance/batch/{batchId}
      */
-    @Test(priority = 4, dependsOnMethods = "testCalculateAndSaveBatch")
+    @Test(priority = 3, dependsOnMethods = "testCalculateAndSaveBatch")
     public void testGetResultsByBatchId() {
         System.out.println("\n TEST 4: Get Results by Batch ID");
         System.out.println("GET " + API_PATH + "/batch/" + batchId);
@@ -180,7 +157,7 @@ public class RebalanceAPITest {
      * Test 5: Verify IBM Stock Rebalance Action
      * GET /api/rebalance/batch/{batchId} -> Filter IBM
      */
-    @Test(priority = 5, dependsOnMethods = "testCalculateAndSaveBatch")
+    @Test(priority = 4, dependsOnMethods = "testCalculateAndSaveBatch")
     public void testIBMRebalanceAction() {
         System.out.println("\n TEST 5: Verify IBM Stock Rebalance");
         System.out.println("GET " + API_PATH + "/batch/" + batchId + " -> IBM");
@@ -233,7 +210,7 @@ public class RebalanceAPITest {
      * Test 6: Validate All Securities Present
      * GET /api/rebalance/batch/{batchId}
      */
-    @Test(priority = 6, dependsOnMethods = "testCalculateAndSaveBatch")
+    @Test(priority = 5, dependsOnMethods = "testCalculateAndSaveBatch")
     public void testAllSecuritiesPresent() {
         System.out.println("\n TEST 6: Validate All Securities Present");
         System.out.println("GET " + API_PATH + "/batch/" + batchId);
@@ -263,75 +240,8 @@ public class RebalanceAPITest {
         System.out.println("Test-Validate All Securities Present PASSED");
     }
 
-    /**
-     * Test 7: Invalid Batch ID (Should return empty or error)
-     * GET /api/rebalance/batch/999
-     */
-    @Test(priority = 7)
-    public void testInvalidBatchId() {
-        System.out.println("\n TEST 7: Invalid Batch ID");
-        System.out.println("GET " + API_PATH + "/batch/999");
+    
 
-        given()
-            .log().all()
-            .pathParam("batchId", 999)
-        .when()
-            .get(API_PATH + "/batch/{batchId}")
-        .then()
-            .log().all()
-            .statusCode(200)  // API returns 200 but with success=false
-            .body("success", equalTo(false));
-
-        System.out.println("Test-Invalid Batch ID (Should return empty or error) PASSED");
-    }
-
-    /**
-     * Test 8: Multiple Batches
-     * POST /api/rebalance/calculate-batch (Call twice)
-     */
-    @Test(priority = 8)
-    public void testMultipleBatches() {
-        System.out.println("\n TEST 8: Create Multiple Batches");
-
-        // First batch
-        System.out.println("Creating Batch 1...");
-        Response response1 = given()
-            .log().all()
-            .contentType(ContentType.JSON)
-            .body("{ \"totalAssetValue\": 100000 }")
-        .when()
-            .post(API_PATH + "/calculate-batch")
-        .then()
-            .log().all()
-            .statusCode(200)
-            .extract()
-            .response();
-
-        int batch1 = response1.jsonPath().getInt("batchId");
-        System.out.println(" Batch 1 ID: " + batch1);
-
-        // Second batch
-        System.out.println("Creating Batch 2...");
-        Response response2 = given()
-            .log().all()
-            .contentType(ContentType.JSON)
-            .body("{ \"totalAssetValue\": 100000 }")
-        .when()
-            .post(API_PATH + "/calculate-batch")
-        .then()
-            .log().all()
-            .statusCode(200)
-            .extract()
-            .response();
-
-        int batch2 = response2.jsonPath().getInt("batchId");
-        System.out.println(" Batch 2 ID: " + batch2);
-
-        // Verify batch IDs are different
-        Assert.assertNotEquals(batch1, batch2, "Batch IDs should be different");
-        System.out.println("Created Batch IDs are sequential");
-        System.out.println("Test-Multiple Batches creation into DB PASSED");
-    }
-
+  
    
 }

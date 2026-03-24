@@ -45,20 +45,3 @@ public class Security implements Comparable<Security> {
 }
 
 
-/*	This Security model represents an individual asset in a portfolio.
-	It encapsulates allocation logic by calculating target and current values based on total portfolio size.
-	This is essential for portfolio rebalancing, where we determine buy/sell actions based on allocation drift.
-
-  	public Security(String name, double target, double current, double price) { 
-    Constructor-Used to create a stock object with the specified name, target allocation, current allocation and price per share.
-
-	//like Security ibm = new Security("IBM", 20, 10, 150);
-	currentValue = 100,000 * (10/100) = 10,000 IBM
-	targetValue = 100,000 * (20/100) = 20,000 IBM
-
-	IBM Differenece between targetValue and currentValue is that targetValue calculates the desired allocation of the stock 
-	20,000 - 10,000 = +10,000 (need to buy more) while currentValue calculates the current allocation of the stock in the portfolio.
-
-	Shares to Buy  = 10,000 / 150 = 66.67 ≈ 67 shares
-
-*/
