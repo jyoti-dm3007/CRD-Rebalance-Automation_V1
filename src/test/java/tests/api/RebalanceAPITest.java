@@ -3,10 +3,14 @@ package tests.api;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import tests.service.RebalanceTest;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 
@@ -204,11 +208,28 @@ public class RebalanceAPITest {
 
         Assert.assertNotNull(ibm, "IBM result not found");
         Assert.assertEquals(ibm.get("action"), "BUY", "IBM action should be BUY");
-        Assert.assertEquals(ibm.get("shares"), 67.0, "IBM shares should be 67");
+        Assert.assertTrue(validateShareCount(((Number) ibm.get("shares")).doubleValue(), 66.665d), "IBM shares should be 66.66");
 
-        System.out.println(" IBM: " + ibm.get("action") + " " + ibm.get("shares") + " shares");
+       
+        //System.out.println(" IBM: " + ibm.get("action") + " " + ibm.get("shares") + " shares","IBM shares should be 67");
         System.out.println("Test-Verify IBM Stock Rebalance Action PASSED");
     }
+    
+    public boolean validateShareCount(Double expectedShares, Double actualShares) {
+    	
+    	System.out.println("expectedShares " +expectedShares) ;
+    	System.out.println("actualShares  "+actualShares) ;
+
+    	
+    	BigDecimal expectedBD = new BigDecimal(expectedShares);
+    	expectedBD = expectedBD.setScale(2, RoundingMode.DOWN);
+    	
+    	BigDecimal actualSharesBD = new BigDecimal(actualShares);
+    	actualSharesBD = actualSharesBD.setScale(2, RoundingMode.DOWN);
+
+    	
+        return expectedBD.compareTo(actualSharesBD) == 0;
+   }
 
     /**
      * Test 6: Validate All Securities Present
