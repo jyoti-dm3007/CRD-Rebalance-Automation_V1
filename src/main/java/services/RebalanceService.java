@@ -46,7 +46,7 @@ public  class RebalanceService {
     	List<RebalanceResult> results = balancePorfolio(securities, totalAssetValue);
     	    		
     	try {
-		System.out.println("Saving " + results.size() + " rebalance results to database...");
+		System.out.println("Saving " + results.size() + " rebalance results to database with BatchId...");
 		
 		// Use DAO layer to save the results to DB and get batch ID
 		int batchId = BalanceResultsDAO.saveBatchResults(results);

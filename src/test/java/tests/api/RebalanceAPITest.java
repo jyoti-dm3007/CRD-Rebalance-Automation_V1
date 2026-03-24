@@ -28,7 +28,7 @@ public class RebalanceAPITest {
     }
 
     /**
-     * Test 2: Calculate Only (No Database Save)
+     * Test 1: Calculate Only (No Database Save)
      * POST /api/rebalance/calculate
      */
     @Test(priority = 1)
@@ -72,7 +72,7 @@ public class RebalanceAPITest {
     }
 
     /**
-     * Test 3: Calculate and Save to Database (Creates Batch)
+     * Test 2: Calculate and Save to Database (Creates Batch)
      * POST /api/rebalance/calculate-batch
      */
     @Test(priority = 2)
@@ -115,7 +115,7 @@ public class RebalanceAPITest {
     }
 
     /**
-     * Test 4: Get Results by Batch ID
+     * Test 3: Get Results by Batch ID
      * GET /api/rebalance/batch/{batchId}
      */
     @Test(priority = 3, dependsOnMethods = "testCalculateAndSaveBatch")
@@ -154,7 +154,7 @@ public class RebalanceAPITest {
     }
 
     /**
-     * Test 5: Verify IBM Stock Rebalance Action
+     * Test 4: Verify IBM Stock Rebalance Action
      * GET /api/rebalance/batch/{batchId} -> Filter IBM
      */
     @Test(priority = 4, dependsOnMethods = "testCalculateAndSaveBatch")
@@ -207,7 +207,7 @@ public class RebalanceAPITest {
    }
 
     /**
-     * Test 6: Validate All Securities Present
+     * Test 5: Validate All Securities Present
      * GET /api/rebalance/batch/{batchId}
      */
     @Test(priority = 5, dependsOnMethods = "testCalculateAndSaveBatch")

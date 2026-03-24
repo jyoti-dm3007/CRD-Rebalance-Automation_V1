@@ -24,7 +24,7 @@ public class RebalanceTest extends BaseTest {
 
         double totalAssetValue = 100000;
 
-        // Page object for UI interactions
+        // Page object for UI interactions if u are using URLbrowser launch
         PortfolioPage portfolio = new PortfolioPage(page);
         
 
